@@ -23,5 +23,11 @@ $(function() {
 
 	var windowHeight = $(window).height()
 	$(".main-content").find("section").height(windowHeight)
+
+	$(".content-wrapper").each(function() {
+		$(this).css({
+			marginTop: (-($(this).height() / 2))
+		})
+	})
 });
 
