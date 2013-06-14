@@ -20,7 +20,7 @@ object Application extends Controller {
   )
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index())
   }
 
   /**
@@ -29,7 +29,7 @@ object Application extends Controller {
    */
   def joinMailing = Action { implicit request =>
     emailForm.bindFromRequest.fold(
-      errorForm => BadRequest(views.html.index("")),
+      errorForm => BadRequest(views.html.index()),
       email => {
         // confirm that there is no one with the specified email.
         val emailCount = DB.withConnection { implicit con =>
@@ -47,7 +47,7 @@ object Application extends Controller {
           Ok(views.html.success())
         } else {
           // show an error page showing
-          BadRequest(views.html.index(""))
+          BadRequest(views.html.index())
         }
       }
     )
