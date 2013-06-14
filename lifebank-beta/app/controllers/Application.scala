@@ -39,7 +39,7 @@ object Application extends Controller {
         }
 
         if (emailCount == 0) {
-          val success = DB.withConnection { implicit con =>
+          DB.withConnection { implicit con =>
             SQL("insert into lifebank_mailing_list (email, created_on) values ({email}, {created_on})")
               .on('email -> email, 'created_on -> new Date)
               .executeInsert()
