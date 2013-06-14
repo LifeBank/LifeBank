@@ -18,9 +18,6 @@
 
 }
 
-
-
-
 @font-face {
     font-family: 'exo';
     src: url('@{fontPath}/exo-bold-webfont.eot');
@@ -32,8 +29,6 @@
     font-style: normal;
 
 }
-
-
 
 @font-face {
     font-family: 'exo';
@@ -47,9 +42,6 @@
 
 }
 
-
-
-
 @font-face {
     font-family: 'exo';
     src: url('@{fontPath}/exo-medium-webfont.eot');
@@ -61,9 +53,6 @@
     font-style: normal;
 
 }
-
-
-
 
 @font-face {
     font-family: 'exo';
@@ -81,17 +70,77 @@ h1, h2, h3, h4, h5, h6 {color: white;}
 p {font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif}
 body {
 	font-family: "exo", "Helvetica Neue", "Helvetica", Arial, sans-serif;
-	background: url(../img/placeholder-bg.jpg) center center;
+	background: url(../img/placeholder-bg.jpg) no-repeat center center;
 	background-attachment: fixed;
 	background-size: cover;
 	color: white;
 }
 .wrapper {
-	section {
-		position: relative;
-		.content-wrapper {
-			position: absolute;
-			top: 50%;
+	.app-demo {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		.phone {
+			background: url(../img/nexus.png) no-repeat center center;
+			background-size: cover;
+			width: 350px;
+			height: 600px;
+			margin-top: 55px;
+		}
+	}
+	.main-content {
+		#home {
+			.newsletter {
+				background: rgba(0,0,0,0.4);
+				padding: 13px;
+				-webkit-border-radius: 7px;
+				border-radius: 7px;
+				display: block;
+				width: 408px;
+
+				input {
+					font-size: 14px;
+					width: 275px;
+					height: 54px;
+					padding: 0 16px;
+					color: #8494a1;
+					-webkit-border-radius: 4px;
+					border-radius: 4px;
+					-webkit-box-shadow: inset 3px 3px 3px 0px rgba(0, 0, 0, 0.04);
+					box-shadow: inset 3px 3px 3px 0px rgba(0, 0, 0, 0.04);
+					border: none;
+					vertical-align: top;
+				}
+				input[type="button"] {
+					font-family: "exo", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+					font-size: 20px;
+					font-weight: bold;
+					color: #ffffff;
+					background: #9ECD6F;
+					border: none;
+					-webkit-border-radius: 4px;
+					border-radius: 4px;
+					display: inline-block;
+					height: 54px;
+					width: 94px;
+					-webkit-box-shadow: inset 0px -5px 1px 0px rgba(71, 142, 109, 0.44);
+					box-shadow: inset 0px -5px 1px 0px rgba(71, 142, 109, 0.44);
+					float: right;
+					cursor: pointer;
+				}
+			}
+		}
+		section {
+			h2, h3 {
+				font-weight: 200;margin-bottom: 10px;line-height: 1.3;font-size: 3em;
+				text-shadow: 1px 1px 2px rgba(0,0,0,0.24);
+			}
+			p {margin-bottom: 20px; font-size: 22px; font-weight: 300;}
+			position: relative;
+			.content-wrapper {
+				position: absolute;
+				top: 50%;
+			}
 		}
 	}
 }
