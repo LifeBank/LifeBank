@@ -29,7 +29,7 @@ object Application extends Controller {
    */
   def joinMailing = Action { implicit request =>
     emailForm.bindFromRequest.fold(
-      errorForm => BadRequest(views.html.index()),
+      errorForm => BadRequest("Please enter a valid email address.").as("text/plain"),
       email => {
         // confirm that there is no one with the specified email.
         val emailCount = DB.withConnection { implicit con =>
@@ -44,20 +44,12 @@ object Application extends Controller {
               .on('email -> email, 'created_on -> new Date)
               .executeInsert()
           }
-          Ok(views.html.success())
+          Ok("Thank you for choosing to save lives.").as("text/plain")
         } else {
           // show an error page showing
-          BadRequest(views.html.index())
+          BadRequest("Oops! This email is already registered.").as("text/plain")
         }
       }
     )
-  }
-
-  /**
-   * shows the success page.
-   * @return
-   */
-  def success = Action {
-    Ok(views.html.success())
   }
 }

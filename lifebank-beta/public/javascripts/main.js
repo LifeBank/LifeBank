@@ -26,21 +26,28 @@ $(function() {
 
 	$(".content-wrapper").each(function() {
 		$(this).css({
-			marginTop: (-($(this).height() / 2))
+//			marginTop: (-($(this).height() / 2))
+            marginTop: -270
 		});
 	});
 
 
-	$.ajax({
-	    url: '/join-mailing',
-	    type: 'post',
-	    data: {
-	    },
-	    dataType: 'html',
-	    success: function() {
-	    },
-	    error: function(data) {
-	    }
-	})
+    $('.submit-form').on('click', function() {
+        $('.info_msg').hide();
+        $.ajax({
+            url: '/join-mailing',
+            type: 'post',
+            data: {
+                email: $('#email').val()
+            },
+            dataType: 'html',
+            success: function(data) {
+                $('.info_msg').text(data).show();
+            },
+            error: function(data) {
+                $('.info_msg').text(data.responseText).show();
+            }
+        });
+    });
 });
 
