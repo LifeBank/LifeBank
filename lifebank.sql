@@ -1,38 +1,3 @@
-/*Table structure for table `locations` */
-
-DROP TABLE IF EXISTS `locations`;
-
-CREATE TABLE `locations` (
-  `location_id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) default NULL,
-  PRIMARY KEY  (`location_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `locations` */
-
-/*Table structure for table `users` */
-
-DROP TABLE IF EXISTS `users`;
-
-CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone` varchar(50) default NULL,
-  `gender` enum('M','F') NOT NULL,
-  `dob` date NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `location` int(11) NOT NULL,
-  `blood_group` enum('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
-  `verified` int(1) NOT NULL default '0',
-  `status` int(1) NOT NULL default '1',
-  PRIMARY KEY  (`user_id`),
-  KEY `FK_users` (`location`),
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`location`) REFERENCES `locations` (`location_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `users` */
-
 /*Table structure for table `activities` */
 
 DROP TABLE IF EXISTS `activities`;
@@ -50,6 +15,18 @@ CREATE TABLE `activities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `activities` */
+
+/*Table structure for table `hospital_admin` */
+
+DROP TABLE IF EXISTS `hospital_admin`;
+
+CREATE TABLE `hospital_admin` (
+  `hospital_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`hospital_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `hospital_admin` */
 
 /*Table structure for table `hospitals` */
 
@@ -70,18 +47,17 @@ CREATE TABLE `hospitals` (
 
 /*Data for the table `hospitals` */
 
+/*Table structure for table `locations` */
 
-/*Table structure for table `hospital_admin` */
+DROP TABLE IF EXISTS `locations`;
 
-DROP TABLE IF EXISTS `hospital_admin`;
-
-CREATE TABLE `hospital_admin` (
-  `hospital_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY  (`hospital_id`,`user_id`)
+CREATE TABLE `locations` (
+  `location_id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `hospital_admin` */
+/*Data for the table `locations` */
 
 /*Table structure for table `notifications` */
 
@@ -132,3 +108,26 @@ CREATE TABLE `user_social_acc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `user_social_acc` */
+
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(50) default NULL,
+  `gender` enum('M','F') NOT NULL,
+  `dob` date NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `location` int(11) NOT NULL,
+  `blood_group` enum('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
+  `verified` int(1) NOT NULL default '0',
+  `status` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`user_id`),
+  KEY `FK_users` (`location`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`location`) REFERENCES `locations` (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `users` */
