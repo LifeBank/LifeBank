@@ -21,5 +21,7 @@ Gumby.touch(function() {
 // Document ready
 $(function() {
 
+	var windowHeight = $(window).height()
+	$(".main-content").find("section").height(windowHeight)
 });
 
