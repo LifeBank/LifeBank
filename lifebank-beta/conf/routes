@@ -5,5 +5,9 @@
 # Home page
 GET     /                           controllers.Application.index
 
+POST    /join-mailing               controllers.Application.joinMailing
+
+GET     /mailing-success            controllers.Application.success
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

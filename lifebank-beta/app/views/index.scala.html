@@ -1,7 +1,10 @@
 @(message: String)
 
 @main("Welcome to Play 2.1") {
-    
-    @play20.welcome(message)
+
+<form action="@routes.Application.joinMailing" method="post">
+    <input type="text" name="email"/>
+    <button type="submit">Submit</button>
+</form>
     
 }
