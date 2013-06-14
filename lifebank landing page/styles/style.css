@@ -1,0 +1,39 @@
+html {
+	height: 100%;
+	background-color: #9acf74;
+}
+
+body {
+}
+
+.wrapper {
+	height: auto;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.logo {
+	background: url(../images/logo.png) no-repeat center top;
+	display: block;
+	width: 375px;
+	height: 97px;
+	margin: 240px auto 0;
+}
+
+h1 {
+	font-family: 'Libre Baskerville', serif;
+	color: #fff;
+	padding: 0 0 60px;
+	font-style: italic;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+}
+
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+/* Retina */
+}
