@@ -15,6 +15,17 @@
     $pages = explode("/", $pagex);
 
     print_r($pages);
+    
+    if ($pages[0] == 'hospital') {
+        include_once 'models/Hospital.php';
+        $user = new User();
+        
+        if ($pages[1] == 'donors') {
+            include_once 'Views/donors.php';
+        }
+    }else{
+        include_once 'Views/index.php';
+    }
 
     // Magic Quotes Fix
     if (ini_get('magic_quotes_gpc')) {

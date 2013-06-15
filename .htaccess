@@ -1,5 +1,13 @@
-RewriteEngine On
+ErrorDocument 404 index.php
+Options -indexes
 
-RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteRule ^(.*)$ route.php/$1
+<IfModule mod_rewrite.c>
+Options +FollowSymLinks
+RewriteEngine On
+RewriteBase /lifebank/
+# Everything else that isn't a file gets routed through the index page
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^(.*)$ index.php?goto=$1 [L]
+</IfModule>
