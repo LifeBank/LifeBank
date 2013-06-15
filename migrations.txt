@@ -1,7 +1,11 @@
+alter table `users` add column `donated_times` int (0)   NOT NULL  after `date`, add column `referrals` int (0)   NOT NULL  after `donated_times`;
+alter table `lifebank`.`users` change `donated_times` `donated_times` int (11)  DEFAULT '0' NULL , change `referrals` `referrals` int (11)  DEFAULT '0' NULL;
+
+
+// Previous migrations
 alter table `users` drop column `dob`;
 alter table `users` add column `last_login` datetime   NOT NULL  after `status`, add column `date` datetime   NOT NULL  after `last_login`;
 alter table `users` add unique `email` ( `email` );
 alter table `hospitals` add column `address` varchar (255)   NOT NULL  after `email`, add column `state` varchar (255)   NOT NULL  after `address`;
 alter table `users` add column `avatar` varchar (255)   NULL  after `email`;
 alter table `users` drop column `gender`;
-alter table `users` add column `donated_times` int (0)   NOT NULL  after `date`, add column `referrals` int (0)   NOT NULL  after `donated_times`

@@ -1,23 +1,12 @@
 <?php
 // General functions
 
-// User logged in or not?
-//  Checked by other methods that requires user to be logged in
-// return bool
-function is_logged() {
-  return $_SESSION['user']['user_id'] ? true : false;
-}
-  
 function logout() {
-  $_SESSION = array();
-  session_destroy();
-  
-  header('location:/');
-  exit;  
 }
 
-/*// Escapes user input for injections
+// Escapes user input for injections
 function escape($input) {
+  /*
   $input = trim($input);
 
   if (get_magic_quotes_gpc ()) {
@@ -31,8 +20,9 @@ function escape($input) {
   // Escape HTML
   $input = htmlentities($input, ENT_QUOTES, 'UTF-8');
 
-  return mysql_real_escape_string($input); 
-}//*/
+  return mysql_real_escape_string($input);  
+  //*/
+}
 
 // Get the session parameter from passed key
 function get_session_parameter($key) {
@@ -54,27 +44,20 @@ function get_gravatar($email, $s = 48, $d = 'mm', $r = 'g', $img = false, $atts 
   return $url;
 }
 
+function get_location_id($name) {
+  $name = escape($name);
+  $r = mysql_query("select location_id from locations where name='$name'");
+  list($id) = mysql_fetch_array($r);
+  
+  return $id;
+}
 
 // Log (super and hospital) admin activities
 function log_activity($object, $id, $action) {
 }
 
-function get_locations() {
-  $row = Database::fetchRows("select location_id, name from locations order by name");
-  return $row;
-}
-
-function get_location_id($name) {
-  $name = Database::escape($name);
-  $row = Database::fetchRows("select location_id from locations where name='$name'");
-  return $row['id'];
-}
-
 // Display error in session (and unset session variable?)
 function get_error() {
-  $error = $_SESSION['error'];
-  unset($_SESSION['error']);
-  return $error;
 }
 
 // TODO:

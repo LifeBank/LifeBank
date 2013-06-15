@@ -1,8 +1,4 @@
 <?php
-define('TwitterOauthKey', 'GYHcAiBIjoVyl4g6R4FQ');
-define('TwitterOauthSecret', 'K20LaIYS5lLEjZBt4Mj7jiYvt3HnthLGpOWMALK1k');
-define('TwhiiToken', '417740965-fYb3u0CwRaLTHqgMJH5QoKlJXTiW3Lr34rxaphLe');
-define('TwhiiSecret', 'VxiNNhG0ATMVKoOfGrwODWO9i9no3I7neSTr51rhdHs');
 /*
  * Abraham Williams (abraham@abrah.am) http://abrah.am
  *
@@ -10,7 +6,7 @@ define('TwhiiSecret', 'VxiNNhG0ATMVKoOfGrwODWO9i9no3I7neSTr51rhdHs');
  */
 
 /* Load OAuth lib. You can find it at http://oauth.net */
-require_once('OAuth.php');
+require 'lib/OAuth.php';
 
 /**
  * Twitter OAuth class
