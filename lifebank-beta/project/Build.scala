@@ -11,7 +11,8 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    "mysql" % "mysql-connector-java" % "5.1.25"
+    "mysql" % "mysql-connector-java" % "5.1.25",
+    "com.typesafe.slick" % "slick_2.10" % "1.0.1-RC1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
