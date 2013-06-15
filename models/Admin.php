@@ -18,7 +18,7 @@ abstract class Admin {
   // param: array of filters (optional)
   // filters are user_id, user_email, blood_group, hospital_id & location
   // return: list of matching users
-  public function get_donor($filters = array()){
+ public function get_donor($filters = array('user_id', 'user_email', 'blood_group', 'location')){
       
       $donors = "SELECT * FROM users WHERE status = '1'";
       
@@ -29,21 +29,29 @@ abstract class Admin {
   // param: array of filters as get_donor().
   // passes filters to get users from get_donor and mail
   // return: bool?
-  public function mail_donor($filters = array());
+  public function mail_donor($filters = array()){
+      
+  }
   
   // Get hospital admin
   // param: hospital_id. If null, use one of current session
   // return: list of hospital admins
-  public function get_hospital_admin($hospital_id = null);
+  public function get_hospital_admin($hospital_id = null){
+      
+  }
   
   // Add the hospital admin
   // param: user_id
   // return: bool
-  public function add_hospital_admin($user_id);
+  public function add_hospital_admin($user_id){
+      
+  }
   
   // Remove hospital admin
   // param: user_id
   // return: bool
-  public function remove_hospital_admin($user_id);
+  public function remove_hospital_admin($user_id){
+      
+  }
 }
 ?>

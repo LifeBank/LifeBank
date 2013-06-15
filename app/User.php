@@ -57,11 +57,16 @@ class User {
   // param: status: 1/0 (active or inactive)
   // return: bool
   public function set_status($status) {
+    $status = (int) $status;
+    // update users set status='$status' where user_id='{user.id}'
+    // return mysql_affected_rows();
   }
   
   // Delete account
   public function delete_account() {
+    // delete from users where user_id='{user.id}'
+    // return mysql_affected_rows();
   }
-   
+
 }
 ?>
