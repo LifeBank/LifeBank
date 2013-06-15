@@ -1,6 +1,23 @@
-/*Table structure for table `activities` */
+-- phpMyAdmin SQL Dump
+-- version 2.10.1
+-- http://www.phpmyadmin.net
+-- 
+-- Host: localhost
+-- Generation Time: Jun 15, 2013 at 05:19 PM
+-- Server version: 5.0.45
+-- PHP Version: 5.2.5
 
-DROP TABLE IF EXISTS `activities`;
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+-- 
+-- Database: `lifebank`
+-- 
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `activities`
+-- 
 
 CREATE TABLE `activities` (
   `log_id` int(11) NOT NULL auto_increment,
@@ -10,27 +27,19 @@ CREATE TABLE `activities` (
   `object_id` int(11) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY  (`log_id`),
-  KEY `FK_activities` (`user_id`),
-  CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `FK_activities` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-/*Data for the table `activities` */
+-- 
+-- Dumping data for table `activities`
+-- 
 
-/*Table structure for table `hospital_admin` */
 
-DROP TABLE IF EXISTS `hospital_admin`;
+-- --------------------------------------------------------
 
-CREATE TABLE `hospital_admin` (
-  `hospital_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY  (`hospital_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `hospital_admin` */
-
-/*Table structure for table `hospitals` */
-
-DROP TABLE IF EXISTS `hospitals`;
+-- 
+-- Table structure for table `hospitals`
+-- 
 
 CREATE TABLE `hospitals` (
   `hospital_id` int(11) NOT NULL auto_increment,
@@ -38,30 +47,58 @@ CREATE TABLE `hospitals` (
   `logo` varchar(255) default NULL,
   `phone` varchar(20) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
   `location` int(11) NOT NULL,
   `status` int(1) NOT NULL default '0',
   PRIMARY KEY  (`hospital_id`),
-  KEY `FK_hospitals` (`location`),
-  CONSTRAINT `hospitals_ibfk_1` FOREIGN KEY (`location`) REFERENCES `locations` (`location_id`)
+  KEY `FK_hospitals` (`location`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- 
+-- Dumping data for table `hospitals`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `hospital_admin`
+-- 
+
+CREATE TABLE `hospital_admin` (
+  `hospital_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`hospital_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `hospitals` */
+-- 
+-- Dumping data for table `hospital_admin`
+-- 
 
-/*Table structure for table `locations` */
 
-DROP TABLE IF EXISTS `locations`;
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `locations`
+-- 
 
 CREATE TABLE `locations` (
   `location_id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   PRIMARY KEY  (`location_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-/*Data for the table `locations` */
+-- 
+-- Dumping data for table `locations`
+-- 
 
-/*Table structure for table `notifications` */
 
-DROP TABLE IF EXISTS `notifications`;
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `notifications`
+-- 
 
 CREATE TABLE `notifications` (
   `notification_id` int(11) NOT NULL auto_increment,
@@ -72,27 +109,67 @@ CREATE TABLE `notifications` (
   `read` int(1) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY  (`notification_id`),
-  KEY `FK_notifications` (`user_id`),
-  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `FK_notifications` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-/*Data for the table `notifications` */
+-- 
+-- Dumping data for table `notifications`
+-- 
 
-/*Table structure for table `superadmin` */
 
-DROP TABLE IF EXISTS `superadmin`;
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `superadmin`
+-- 
 
 CREATE TABLE `superadmin` (
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY  (`user_id`),
-  CONSTRAINT `superadmin_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+  PRIMARY KEY  (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `superadmin` */
+-- 
+-- Dumping data for table `superadmin`
+-- 
 
-/*Table structure for table `user_social_acc` */
 
-DROP TABLE IF EXISTS `user_social_acc`;
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `users`
+-- 
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL auto_increment,
+  `username` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `avatar` varchar(255) default NULL,
+  `phone` varchar(50) default NULL,
+  `password` varchar(50) NOT NULL,
+  `location` int(11) NOT NULL,
+  `blood_group` enum('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
+  `verified` int(1) NOT NULL default '0',
+  `status` int(1) NOT NULL default '1',
+  `last_login` datetime NOT NULL,
+  `date` datetime NOT NULL,
+  `donated_times` int(11) NOT NULL,
+  `referrals` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `FK_users` (`location`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- 
+-- Dumping data for table `users`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `user_social_acc`
+-- 
 
 CREATE TABLE `user_social_acc` (
   `user_id` int(11) NOT NULL,
@@ -103,31 +180,50 @@ CREATE TABLE `user_social_acc` (
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) NOT NULL,
   PRIMARY KEY  (`social_id`,`type`),
-  KEY `FK_user_social_acc` (`user_id`),
-  CONSTRAINT `user_social_acc_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+  KEY `FK_user_social_acc` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `user_social_acc` */
+-- 
+-- Dumping data for table `user_social_acc`
+-- 
 
-/*Table structure for table `users` */
 
-DROP TABLE IF EXISTS `users`;
+-- 
+-- Constraints for dumped tables
+-- 
 
-CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone` varchar(50) default NULL,
-  `gender` enum('M','F') NOT NULL,
-  `dob` date NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `location` int(11) NOT NULL,
-  `blood_group` enum('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
-  `verified` int(1) NOT NULL default '0',
-  `status` int(1) NOT NULL default '1',
-  PRIMARY KEY  (`user_id`),
-  KEY `FK_users` (`location`),
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`location`) REFERENCES `locations` (`location_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- 
+-- Constraints for table `activities`
+-- 
+ALTER TABLE `activities`
+  ADD CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
-/*Data for the table `users` */
+-- 
+-- Constraints for table `hospitals`
+-- 
+ALTER TABLE `hospitals`
+  ADD CONSTRAINT `hospitals_ibfk_1` FOREIGN KEY (`location`) REFERENCES `locations` (`location_id`);
+
+-- 
+-- Constraints for table `notifications`
+-- 
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+-- 
+-- Constraints for table `superadmin`
+-- 
+ALTER TABLE `superadmin`
+  ADD CONSTRAINT `superadmin_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+-- 
+-- Constraints for table `users`
+-- 
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`location`) REFERENCES `locations` (`location_id`);
+
+-- 
+-- Constraints for table `user_social_acc`
+-- 
+ALTER TABLE `user_social_acc`
+  ADD CONSTRAINT `user_social_acc_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
