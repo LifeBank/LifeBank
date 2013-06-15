@@ -302,6 +302,31 @@ box-shadow:  inset 0 -5px 1px 0 rgba(71, 142, 109, 0.44);
 cursor:  pointer;
 
 }
+.members{
+    margin-top: 30px;
+}
+.members li{
+    width: 50px;
+    display: inline-block;
+    margin-right: 5px;
+    position: relative;
+}
+.members li img{
+    border: 1px solid #141414;
+}
+
+.members .name {
+    display:none;
+    width: 200px;
+    position: absolute;
+    top: -10px;
+    font-family:  "Helvetica Neue", "Helvetica", Arial, sans-serif;
+    font-size: 12px;
+}
+.members li:hover .name{
+    display: block;
+}
+
 
 /* Top Navigation */
 .top-bar {
