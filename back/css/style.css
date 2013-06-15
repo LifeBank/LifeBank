@@ -218,6 +218,7 @@ header .logo{
     display: block;
     cursor: pointer;
 }
+
 /** Mobile **/
 @media only screen and (max-width: 767px) {
     header{
