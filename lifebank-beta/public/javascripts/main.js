@@ -31,11 +31,13 @@ $(function() {
 		});
 	});
 
+    // the default message displayed in the box.
+    var defaultMessage = "Want to save lives? Drop your email";
 
     $('.submit-form').on('click', function() {
         $('.info_msg').hide();
         $.ajax({
-            url: '/join-mailing',
+            url: '/save-lives',
             type: 'post',
             data: {
                 email: $('#email').val()
@@ -43,9 +45,11 @@ $(function() {
             dataType: 'html',
             success: function(data) {
                 $('.info_msg').text(data).show();
+                $('#email').val(defaultMessage).blur();
             },
             error: function(data) {
                 $('.info_msg').text(data.responseText).show();
+                $('#email').val(defaultMessage);
             }
         });
     });

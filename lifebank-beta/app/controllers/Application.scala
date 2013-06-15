@@ -40,16 +40,25 @@ object Application extends Controller {
 
         if (emailCount == 0) {
           DB.withConnection { implicit con =>
-            SQL("insert into lifebank_mailing_list (email, created_on) values ({email}, {created_on})")
-              .on('email -> email, 'created_on -> new Date)
-              .executeInsert()
+            SQL("""
+              insert into lifebank_mailing_list (email, user_agent, created_on)
+              values ({email}, {user_agent}, {created_on})
+              """)
+              .on(
+                'email -> email,
+                'user_agent -> userAgent,
+                'created_on -> new Date
+              ).executeInsert()
           }
           Ok("Thank you for choosing to save lives.").as("text/plain")
         } else {
           // show an error page showing
-          BadRequest("Oops! This email is already registered.").as("text/plain")
+          BadRequest("Oops! That email is already registered.").as("text/plain")
         }
       }
     )
   }
+
+  private def userAgent(implicit request: Request[AnyContent]) =
+    request.headers.get("User-Agent")
 }
