@@ -46,7 +46,7 @@
     								<img src="img/logo-cw.png" alt="">
     							</div>
     							<h2>In Nigeria, access to safe blood is limited.</h2>
-    							<p>LifeBank makes it easy to give and receive blood. We need your help, signup and start saving lives.</p>
+    							<p>LifeBank makes it easy to give and receive blood. We <br /> need your help, signup and start saving lives.</p>
 
                   <?php
                   if (!is_logged()) {
