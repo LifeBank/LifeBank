@@ -140,7 +140,7 @@ body {
     -khtml-border-radius: 4px;
     border-radius: 4px;
     border: 1px solid transparent;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 45px;
     font-weight: 400;
     color: #fff;
@@ -196,7 +196,7 @@ body {
 
 .support {
 	position:  absolute;
-	bottom:  10px;
+	bottom:  -5px;
 	left:  15%;
 	width:  800px;
 
