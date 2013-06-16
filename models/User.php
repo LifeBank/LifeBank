@@ -113,6 +113,14 @@ class User {
       unset($_SESSION['sm']);
     }
     
+    if ($_SESSION['sm']['facebook']) {
+      $data = $_SESSION['sm']['facebook'];
+      $this->add_social_account($data['id'], $data['username'], $data['name'], 'f', $data['code'], '', 'http://graph.facebook.com/'.$data['id'].'/picture');
+      $this->set_avatar('f');
+      
+      unset($_SESSION['sm']);
+    }
+    
     unset($_SESSION['tmp']);
     
     return true;

@@ -77,15 +77,47 @@ else if ($url == 'facebook') {
   ));
   $user = $facebook->getUser();
   if ($user) {
-    if (is_logged()) {
-      // add account
-    }
-    else {
-      // social login?
-      // no
-      // register
+    try {
+      // Proceed knowing you have a logged in user who's authenticated.
+      $data = $facebook->api('/me');
+      if (is_logged()) {
+        // add account
+          if ($user->add_social_account($data['id'], $data['username'], $data['name'], 'f', $_GET['code'], '', 'http://graph.facebook.com/'.$data['id'].'/picture')) {
+            // Redirect to profile page
+            $_SESSION['status'] = 'Your social account has been added to your profile';
+          }
+          //echo $_SESSION['error'];
+          header('location:'.$_SESSION['user']['username']);
+          exit;
+      }
+      else {
+        // social login?
+        // no
+        // register
+        if ($user->social_login($data['user_id'], 'f', $_GET['code'], '')) {
+          // Redirect to profile page
+          header('location:'.$_SESSION['user']['username']);
+          exit;
+        }
+        else {
+          // register
+          $_SESSION['sm']['facebook'] = $data;
+          $_SESSION['sm']['facebook']['code'] = $_GET['code'];
+          $_SESSION['tmp'] = array();
+          $_SESSION['tmp']['name'] = $data['name'];
+          $_SESSION['tmp']['username'] = $data['username'];
+          $_SESSION['tmp']['email'] = $data['email'];
+          
+          header('location:user/signup');
+          exit;
+        }
+      }
+    } catch (FacebookApiException $e) {
+      error_log($e);
+      $user = null;
     }
   }
+  
   header("location:".$facebook->getLoginUrl());
   exit;  
 }

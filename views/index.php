@@ -45,8 +45,8 @@
     							<div class="logo image">
     								<img src="img/logo-cw.png" alt="">
     							</div>
-    							<h2>In Nigeria, access to safe blood is limited.</h2>
-    							<p>LifeBank makes it easy to give and receive blood. <br /> We need your help, signup and start saving lives.</p>
+    							<h2>In Nigeria, access to safe<br /> blood is limited.</h2>
+                  <p>LifeBank makes it easy to give and receive blood. <br /> We need your help, signup and start saving lives.</p>
 
                   <?php
                   if (!is_logged()) {
