@@ -20,13 +20,19 @@ else if ($url == 'user/settings') {
   require 'views/user/settings.php';
 }
 else if ($url == 'user/signup') {
+  /*if (!$_SESSION['tmp']['password'] && !$_SESSION['sm']) {
+    header('location:./');
+    exit;
+  }*/
+  
   include_once 'models/User.php';
   $user = new User;
   
   if ($_POST) {
-    $_POST['password'] = $_SESSION['tmp']['password'];
+    $_POST['password'] = $_POST['password'] ? $_POST['password'] :$_SESSION['tmp']['password'];
     $_SESSION['tmp'] = $_POST;
-    if ($user->signup($_POST['username'], $_POST['name'], $_SESSION['tmp']['email'], $_SESSION['tmp']['password'], $_POST['phone'], $_POST['blood_type'], $_POST['location'])) {
+    if ($user->signup($_POST['username'], $_POST['name'], $_SESSION['tmp']['email'], $_SESSION['tmp']['password'], $_POST['phone'], $_POST['blood_type'], $_POST['location'], $_SESSION['ref'])) {
+      $_SESSION['status'] = 'Your profile has been created. Welcome to lifebank.';
       header('location:../'.$_POST['username']);
       exit;
     }
@@ -36,21 +42,81 @@ else if ($url == 'user/signup') {
   
   require 'views/user/register.php';
 }
+else if ($url == 'twitter') {
+  include_once 'models/User.php';
+  $user = new User;
+
+  require 'lib/twitter/twitterOAuth.php';
+
+  // Generate auth url
+  // Create TwitterOAuth object with app key/secret
+  $twitter = new TwitterOAuth(TwitterOauthKey, TwitterOauthSecret);
+
+  // Request tokens from twitter
+  $args = array('oauth_callback' => TwitterCallback);
+  $tok = $twitter->getRequestToken($args);
+
+  // Save tokens for later
+  $_SESSION['twitter_oauth_request_token'] = $token = $tok['oauth_token'];
+  $_SESSION['twitter_oauth_request_token_secret'] = $tok['oauth_token_secret'];
+
+  // Build the authorization URL
+  $request_link = $twitter->getAuthorizeURL($token, true);
+  header("location:$request_link");
+  exit;  
+}
+else if ($url == 'facebook') {
+  include_once 'models/User.php';
+  $user = new User;
+
+  require 'lib/facebook/facebook.php';
+  
+  $facebook = new Facebook(array(
+    'appId'  => FBAppID,
+    'secret' => FBAppSecret,
+  ));
+  $user = $facebook->getUser();
+  if ($user) {
+    if (is_logged()) {
+      // add account
+    }
+    else {
+      // social login?
+      // no
+      // register
+    }
+  }
+  header("location:".$facebook->getLoginUrl());
+  exit;  
+}
+else if ($url == 'twitter-callback') {
+  include_once 'models/User.php';
+  $user = new User;
+  require 'views/user/twitter_callback.php';
+}
 else {
   if (empty($url)) {
     // Default page
+    include_once 'models/User.php';
+    $user = new User;
+    
+    if ($_GET['ref']) {
+      if ($user->get_user($_GET['ref'])) {
+        $_SESSION['ref'] = $_GET['ref'];
+      }
+    }
+    
     if ($_POST['email'] && $_POST['password']) {
       if (isset($_POST['signup'])) {
         $_SESSION['tmp'] = array(
             'email' => $_POST['email'],
             'password' => $_POST['password']
           );
+        unset($_SESSION['sm']);
         header("location:user/signup");
         exit;
       }
       else if (isset($_POST['signin'])) {
-        include_once 'models/User.php';
-        $user = new User;
         if ($user->login($_POST['email'], $_POST['password'])) {
           header("location:".$_SESSION['user']['username']);
           exit;
@@ -67,6 +133,8 @@ else {
     $user = $userModel->get_user($url);
     if ($user) {
       $user['blood_group'] = $user['blood_group'] ? $user['blood_group'] : '&mdash;';
+      if ($_GET['remove'])
+        $userModel->remove_social_account($_GET['remove'], $_GET['type']);
       require 'views/user/profile.php';
     }
     else {

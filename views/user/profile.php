@@ -94,7 +94,7 @@
                     </div>
 
                     <?php
-                    if ($_SESSION['user']['user_id'] == $user['user_id']) {
+                    if (is_logged() && $_SESSION['user']['user_id'] == $user['user_id']) {
                     ?>
                     <div class="wrapper seven columns centered">
                         <div class="ten columns centered user-info">

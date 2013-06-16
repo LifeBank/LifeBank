@@ -35,30 +35,7 @@
                         </div>
                         
                         <p>Just one more step to go...</p>
-                        <p><?php echo get_error(); ?></p>
-                        <!-- <div class="ten columns centered user-info">
-                            <ul class="three_up tiles">
-                                <li>
-                                    <div>
-                                        <span class="value">O+</span>
-                                        <span class="title">Blood Group</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <span class="value">12</span>
-                                        <span class="title">Donated</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <span class="value">200</span>
-                                        <span class="title">Referrals</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div> -->
-                        
+                        <p><?php echo get_error(); ?></p>                        
                         
                         <div class="edit-form">
                             <form method="post">
@@ -70,6 +47,17 @@
                                         <span><i class="icon-user"></i></span>
                                         <input class="xwide text input" type="text" name="username" placeholder="Pick a Username" value="<?php echo $_SESSION['tmp']['username']; ?>">
                                     </li>
+                                    
+                                    <?php
+                                    if (!$_SESSION['tmp']['password']) {
+                                    ?>
+                                    <li class="field">
+                                        <span><i class="icon-lock"></i></span>
+                                        <input class="xwide text input" type="password" name="password" placeholder="Choice Password">
+                                    </li>
+                                    <?php
+                                    }
+                                    ?>
                                     
                                     <li class="field">
                                         <span><i class="icon-user"></i></span>

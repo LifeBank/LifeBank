@@ -19,8 +19,8 @@ if(isset($_REQUEST['oauth_token'])) {
     if (is_logged()) {
       // Logged? Add account
       $data = get_twitter_user($tok);
-      echo $_SESSION['user']['username'];
-      if ($user->add_social_account($data['id'], $data['name'], 't', $tok['oauth_token'], $tok['oauth_token_secret'], $data['profile_image_url'])) {
+      $data['profile_image_url'] = preg_replace('|_normal\.|i', '.', $data['profile_image_url']);
+      if ($user->add_social_account($data['id'], $tok['screen_name'], $data['name'], 't', $tok['oauth_token'], $tok['oauth_token_secret'], $data['profile_image_url'])) {
         // Redirect to profile page
         $_SESSION['status'] = 'Your social account has been added to your profile';
       }
@@ -30,7 +30,7 @@ if(isset($_REQUEST['oauth_token'])) {
     }
     else {
       // Nope? Login or Register
-      if ($user->social_login($tok['id'], 't', $tok['oauth_token'], $tok['oauth_token_secret'])) {
+      if ($user->social_login($tok['user_id'], 't', $tok['oauth_token'], $tok['oauth_token_secret'])) {
         // Redirect to profile page
         header('location:'.$_SESSION['user']['username']);
         exit;
@@ -39,6 +39,13 @@ if(isset($_REQUEST['oauth_token'])) {
         // register
         $data = get_twitter_user($tok);
         $_SESSION['sm']['twitter'] = $data;
+        $_SESSION['sm']['twitter']['screen_name'] = $tok['screen_name'];
+        $_SESSION['sm']['twitter']['oauth_token'] = $tok['oauth_token'];
+        $_SESSION['sm']['twitter']['oauth_token_secret'] = $tok['oauth_token_secret'];
+        $_SESSION['tmp'] = array();
+        $_SESSION['tmp']['name'] = $data['name'];
+        $_SESSION['tmp']['username'] = $tok['screen_name'];
+        
         header('location:user/signup');
         exit;
       }
