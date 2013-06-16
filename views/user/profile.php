@@ -23,7 +23,7 @@
             <div class="container">
                 <div class="row">
                     <?php
-                    if ($_SESSION['user']['user_id'] != $user['user_id']) {
+                    if (!is_logged()) {
                     ?>
                     <div class="wrapper seven columns centered">
                       <p><?php echo $user['name']; ?> has signed up to give blood and save lifes. <a href="./?ref=<?php echo $user['username']; ?>#login">Join him to save lifes too</a>.</p>
@@ -45,7 +45,7 @@
                             }
                             ?>
                             <div class="image circle">
-                                <img src="<?php echo get_gravatar($user['email'], 96); ?>" width="96">
+                                <img src="<?php echo $user['avatar']; ?>" width="96">
                             </div>
                             <h3><?php echo $user['name']; ?></h3>
                             <span class="location"><i class="icon-location"></i><?php echo $user['location']; ?></span>
@@ -102,7 +102,12 @@
                                 <li>
                                     <div>
                                         <span class="value"><i class="icon-twitter"></i></span>
-                                        <span class="title"><a href="twitter">Add</a></span>
+                                        <span class="title"><?php
+                                        if ($r = $userModel->get_social_account($user['user_id'], 't'))
+                                          echo '<a href="http://twitter.com/'.$r['username'].'">@'.$r['username'].'</a> (<a href="?remove='.$r['social_id'].'&type=t">remove</a>)';
+                                        else
+                                          echo '<a href="twitter">Add';
+                                        ?></a></span>
                                     </div>
                                 </li>
                                 <li>

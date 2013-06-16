@@ -9,12 +9,12 @@ class User {
   
   public function get_user($username) {
     $username = Database::escape($username);
-    $r = Database::fetchRow("select username, u.name, email, avatar, phone, l.name as location, blood_group, verified, status, donated_times, referrals from users u, locations l where username='$username' and u.location=l.location_id");
+    $r = Database::fetchRow("select user_id, username, u.name, email, avatar, phone, l.name as location, blood_group, verified, status, donated_times, (select count(*) from users where referral='$username') as referrals from users u, locations l where username='$username' and u.location=l.location_id");
     return $r;
   }
   
   // return: id
-  public function signup($username, $name, $email, $password, $phone, $blood_type, $location_id) {
+  public function signup($username, $name, $email, $password, $phone, $blood_type, $location_id, $ref = null) {
     $username = Database::escape($username);
     $name = Database::escape($name);
     $email = Database::escape($email);
@@ -79,25 +79,39 @@ class User {
 		$hasher = new PasswordHash(8, FALSE);
 		$hash = $hasher->HashPassword($password);
     
-    $id = Database::insert('users', array(
+    $arr = array(
         'username' => $username,
         'name' => $name,
         'email' => $email,
         'password' => $hash,
         'phone' => $phone,
+        'avatar' => get_gravatar($email, 96),
         'location' => $location_id,
         'blood_group' => $blood_type,
         'last_login' => date('YYYY-MM-DD HH:mm'),
         'date' => date('YYYY-MM-DD HH:mm')
-      ));
+      );
+    if ($ref)
+      $arr['referral'] = $ref;
+    $id = Database::insert('users', $arr);
     
     // Login
     $_SESSION['user'] = array(
       'user_id' => $id,
+      'username' => $username,
       'name' => $name,
       'email' => $email,
       'last_login' => date('YYYY-MM-dd HH:mm')
     );
+    
+    // Social?
+    if ($_SESSION['sm']['twitter']) {
+      $data = $_SESSION['sm']['twitter'];
+      $this->add_social_account($data['id'], $data['screen_name'], $data['name'], 't', $data['oauth_token'], $data['oauth_token_secret'], $data['profile_image_url']);
+      $this->set_avatar('t');
+      
+      unset($_SESSION['sm']);
+    }
     
     unset($_SESSION['tmp']);
     
@@ -149,38 +163,36 @@ class User {
   // param: id (from oauth login), social_media: 'f' (facebook) or 't' (twitter)
   // return: bool
   public function social_login($id, $social_media, $key, $token) {
-    if ($social_media != 'f' || $social_media != 't') {
-      // error: invalid type
+    if ($social_media != 'f' && $social_media != 't') {
+      $_SESSION['error'] = 'Invalid social account';
       return false;
     }
       
     $id = (int) $id;
     
     $q = "select user_id from user_social_acc where social_id='$id' and type='$social_media'";
-    $r = mysq_query($q);
-    list($user_id) = mysql_fetch_array($r);
+    $r = Database::fetchRow($q);
+    $user_id = $r['user_id'];
     
     if (!$user_id) {
       // Not registered, register
-      
+      return false;
     }
     
-		$r = mysql_query("select user_id, username, name, email, verified, status, last_login from users where user_id='$user_id'");
-		if (mysql_num_rows($r)) {
-			list($user_id, $username, $name, $email, $verified, $status, $ll) = mysql_fetch_array($r);
-      
+		$r = Database::fetchRow("select user_id, username, name, email, verified, status, last_login from users where user_id='$user_id'");
+		if ($r) {      
       // User sessions
       $_SESSION['user'] = array(
-        'user_id' => $user_id,
-        'username' => $username,
-        'name' => $name,
-        'email' => $email,
-        'verified' => $verified,
-        'status' => $status,
-        'last_login' => $ll
+        'user_id' => $r['user_id'],
+        'username' => $r['username'],
+        'name' => $r['name'],
+        'email' => $r['email'],
+        'verified' => $r['verified'],
+        'status' => $r['status'],
+        'last_login' => $r['ll']
       );
 			
-			mysql_query("update users set last_login=now() where email='".escape($email)."'");
+			Database::query("update users set last_login=now() where email='".Database::escape($r['email'])."'");
 			return true;
     }
     
@@ -188,40 +200,61 @@ class User {
     return false;
   }
   
+  public function get_social_account($user_id, $type) {
+    $user_id = (int) $user_id;
+    if ($type != 'f' && $type != 't')
+      return false;
+    return Database::fetchRow("select * from user_social_acc where user_id='$user_id' and type='$type'");
+  }
+  
   // param: id (unique id on social site), name (name or username on SS), type: t or f, 
   //   key (oauth key), token (oauth token)
-  public function add_social_account($id, $name, $type, $key, $token, $avatar) {
+  public function add_social_account($id, $username=null, $name, $type, $key, $token, $avatar) {
     $id = (int) $id;
-    $name = escape($name);
-    $avatar = escape($avatar);
+    $name = Database::escape($name);
+    $username = Database::escape($username);
+    $avatar = Database::escape($avatar);
     
     if (!is_logged()) {
       // error: User not found
+      $_SESSION['error'] = 'User not found';
       return false;
     }
     
-    if ($type != 'f' && !$type != 't') {
+    if ($type != 'f' && $type != 't') {
       // error: invalid type
+      $_SESSION['error'] = 'Invalid social account';
       return false;
     }
     
-    $q = "insert into user_social_acc (user_id, social_id, type, okey, otoken, name, avatar) values ('{$_SESSION['user']['user_id']}', '$id', '$type', '$key', '$token', '$name', '$avatar')";
-    $r = mysql_query($q);
+    $r = $this->get_social_account($_SESSION['user']['user_id'], $type);
+    if ($r['user_id']) {
+      $this->remove_social_account($r['social_id'], 't');
+    }
     
-    return mysql_num_rows($r);
+    return Database::insert('user_social_acc', array(
+      'user_id' => $_SESSION['user']['user_id'],
+      'social_id' => $id,
+      'username' => $username,
+      'type' => $type,
+      'okey' => $key,
+      'otoken' => $token,
+      'name' => $name,
+      'avatar' => $avatar,
+    ));
   }
   
   // param: id, type (just in case has same id across social acc)
   public function remove_social_account($id, $type) {
     $id = (int) $id;
-    if ($type != 'f' && !$type != 't') {
+    if ($type != 'f' && $type != 't') {
       // error: invalid type
       return false;
     }
     
-    $q = "delete from user_social_acc where user_id='{user.id}' and social_id='$id' and type='$type'";
-    mysql_query($q);
-    return mysql_affected_rows();
+    $q = "delete from user_social_acc where user_id='{$_SESSION['user']['user_id']}' and social_id='$id' and type='$type'";
+    return Database::query($q);
+    //return mysql_affected_rows();
   }
   
   // param: $param - array of user object to update and value in key=>value relationship
@@ -283,21 +316,20 @@ class User {
         break;
       case 't':
         $q = "select avatar from user_social_acc where user_id='{$_SESSION['user']['user_id']}' and type='t'";
-        $r = mysql_query($q);
-        list($avatar) = mysql_fetch_array($r); 
+        $r = Database::fetchRow($q);
+        $avatar = $r['avatar'];
         break;
       case 'f':
         $q = "select avatar from user_social_acc where user_id='{$_SESSION['user']['user_id']}' and type='f'";
-        $r = mysql_query($q);
-        list($avatar) = mysql_fetch_array($r); 
+        $r = Database::fetchRow($q);
+        $avatar = $r['avatar'];
         break;
       default:
         return false;
         break;
     }
     
-    mysql_query("update users set avatar='$avatar' where user_id='{$_SESSION['user']['user_id']}'");
-    return mysql_affected_rows();
+    return Database::query("update users set avatar='$avatar' where user_id='{$_SESSION['user']['user_id']}'");
   }
   
   // Upload avatar
