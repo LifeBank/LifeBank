@@ -1,6 +1,5 @@
 <?php
 require 'lib/twitter/twitterOAuth.php';
-
 // returning from auth, create tokens and save
 if(isset($_REQUEST['oauth_token'])) {
 	// Create TwitterOAuth object with app key/secret and token key/secret from default phase
@@ -17,11 +16,15 @@ if(isset($_REQUEST['oauth_token'])) {
   
 	// Get timeline
 	if($tok['screen_name']) {
-    if ($user->is_logged()) {
+    if (is_logged()) {
       // Logged? Add account
       $data = get_twitter_user($tok);
-      $user->add_social_account($data['id'], $data['name'], 't', $tok['oauth_token'], $tok['oauth_token_secret'], $tok['profile_image_url']);
-      // Redirect to profile page
+      echo $_SESSION['user']['username'];
+      if ($user->add_social_account($data['id'], $data['name'], 't', $tok['oauth_token'], $tok['oauth_token_secret'], $data['profile_image_url'])) {
+        // Redirect to profile page
+        $_SESSION['status'] = 'Your social account has been added to your profile';
+      }
+      //echo $_SESSION['error'];
       header('location:'.$_SESSION['user']['username']);
       exit;
     }
@@ -36,7 +39,7 @@ if(isset($_REQUEST['oauth_token'])) {
         // register
         $data = get_twitter_user($tok);
         $_SESSION['sm']['twitter'] = $data;
-        header('location:../complete-signup');
+        header('location:user/signup');
         exit;
       }
     }
@@ -48,7 +51,7 @@ if(isset($_REQUEST['oauth_token'])) {
   }
 }
 else {
-	header('location:twitter');
+	header('location:./');
 	exit;
 }
 ?>

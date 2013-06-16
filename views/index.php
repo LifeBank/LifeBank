@@ -63,18 +63,18 @@
                       echo get_error();
                     ?>
                   </div>
-                  <?php
-                  }
-                  ?>
 
-                  <!--div class="social-signup">
-                    <a href="/auth/twitter" class="twitter-connect social-login"><i class="icon-twitter"></i> <span>Sign in with Twitter</span></a>
-                    <a href="/auth/facebook" class="facebook-connect social-login"><i class="icon-facebook"></i><span>Sign in with Facebook</span></a>
-                  </div-->
+                  <div class="social-signup">
+                    <a href="twitter" class="twitter-connect social-login"><i class="icon-twitter"></i> <span>Sign up with Twitter</span></a>
+                    <a href="facebook" class="facebook-connect social-login"><i class="icon-facebook"></i><span>Sign up with Facebook</span></a>
+                  </div>
                   
                   <div class="email-login" style="margin-bottom:20px">
                     <span>Already have an account? <a href="#login">Sign in here</a> </span>
                   </div>
+                  <?php
+                  }
+                  ?>
     						</div>
     					</div>
     				</div>
@@ -93,10 +93,10 @@
     					<div class="row">
     						<div class="five columns alpha content-wrapper">
                   <h2>Login to LifeBank</h2>
-                  <!--p>Sign with your username <or with Facebook & Twitter--></p>
                   <?php
                   if (!is_logged()) {
                   ?>
+                  <p>Sign with your username <or with Facebook & Twitter></p>
     							<div class="newsletter">
                     <form method="post">
                       <input class="mail" name="email" type="text" placeholder="Enter your email">
@@ -108,14 +108,18 @@
                       echo get_error();
                     ?>
                   </div>
+                  <div class="social-signup">
+                    <a href="twitter" class="twitter-connect social-login"><i class="icon-twitter"></i> <span>Sign in with Twitter</span></a>
+                    <a href="facebook" class="facebook-connect social-login"><i class="icon-facebook"></i><span>Sign in with Facebook</span></a>
+                  </div>
+                  <?php
+                  }
+                  else {
+                  ?>
+                  <p>You are already logged in as <?php echo $_SESSION['user']['name']; ?>. <a href="logout">Logout</a></p>
                   <?php
                   }
                   ?>
-
-                  <!--div class="social-signup">
-                    <a href="/auth/twitter" class="twitter-connect social-login"><i class="icon-twitter"></i> <span>Sign in with Twitter</span></a>
-                    <a href="/auth/facebook" class="facebook-connect social-login"><i class="icon-facebook"></i><span>Sign in with Facebook</span></a>
-                  </div-->
     						</div>
     					</div>
     				</div>

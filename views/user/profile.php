@@ -22,10 +22,23 @@
         <section>
             <div class="container">
                 <div class="row">
+                    <?php
+                    if ($_SESSION['user']['user_id'] != $user['user_id']) {
+                    ?>
+                    <div class="wrapper seven columns centered">
+                      <p><?php echo $user['name']; ?> has signed up to give blood and save lifes. <a href="./?ref=<?php echo $user['username']; ?>#login">Join him to save lifes too</a>.</p>
+                    </div>
+                    <?php
+                    }
+                    ?>
                     <div class="wrapper seven columns centered">
                         <div class="centered user-profile">
                             <?php
                             if (is_logged()) {
+                              if ($_SESSION['status']) {
+                                echo '<p>'.$_SESSION['status'].'</p>';
+                                unset($_SESSION['status']);
+                              }
                             ?>
                               <span class="edit"><!--a href=""><i class="icon-pencil"></i>Edit</a--> <a href="logout"><i class="icon-logout"></i>Logout</a></span>
                             <?php
@@ -79,7 +92,32 @@
                         
                         
                     </div>
-                    
+
+                    <?php
+                    if ($_SESSION['user']['user_id'] == $user['user_id']) {
+                    ?>
+                    <div class="wrapper seven columns centered">
+                        <div class="ten columns centered user-info">
+                            <ul class="three_up tiles">
+                                <li>
+                                    <div>
+                                        <span class="value"><i class="icon-twitter"></i></span>
+                                        <span class="title"><a href="twitter">Add</a></span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <span class="value"><i class="icon-facebook"></i></span>
+                                        <span class="title"><a href="facebook">Add</a></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <?php
+                    }
+                    ?>
+                    <p>&nbsp;</p>
                 </div>
             </div>
         </section>

@@ -96,7 +96,7 @@
                                             $locations = get_locations();
                                             foreach ($locations as $v) {
                                             ?>
-                                              <option value="<?php echo $v['location_id']; ?>"><?php echo $v['name']; ?></option>
+                                              <option value="<?php echo $v['location_id']; ?>"<?php echo $v['location_id'] == $_SESSION['tmp']['location'] ? ' selected="selected"' : ''; ?>><?php echo $v['name']; ?></option>
                                             <?php
                                             }
                                             ?>
