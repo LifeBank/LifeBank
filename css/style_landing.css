@@ -361,3 +361,5 @@ nav.navigation li.link-icon {
 	margin-right: 10px;
 	font-size: 20px;
 }*/
+
+@media only screen and (max-width: 767px) { .wrapper .app-demo {display: none;} }
