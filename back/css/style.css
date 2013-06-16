@@ -44,7 +44,7 @@ body {
 }
 
 header{
-    background: #393939;
+    background: url(../img/top_bar_bg.png) repeat-x;
 }
 header .logo{
     padding:10px;
@@ -103,8 +103,9 @@ header .logo{
 .user-profile h3{
     display: block;
     clear: both;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 500;
+    font-family: "exo", "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
 
 .user-profile .image{
