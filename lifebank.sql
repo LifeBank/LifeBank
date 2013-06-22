@@ -1,3 +1,6 @@
+/* disable foreign key checks */
+SET FOREIGN_KEY_CHECKS = 0;
+
 /*Table structure for table `activities` */
 
 DROP TABLE IF EXISTS `activities`;
@@ -131,3 +134,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `users` */
+
+/* enable foreign key checks */
+SET FOREIGN_KEY_CHECKS = 1;
